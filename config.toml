@@ -1,0 +1,11 @@
+listen = "0.0.0.0:8001"
+
+[proxy]
+
+  [proxy.outer]
+  address = "10.0.0.1:3128"
+  target_file = "outer.csv"
+
+  [proxy.internal]
+  address = "10.0.0.2:3128"
+  target_file = "internal.csv"

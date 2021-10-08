@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <!-- vue 2.x -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+
+  <!-- elementui -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.2/lib/theme-chalk/index.css">
+  <script src="https://unpkg.com/element-ui@2.13.2/lib/index.js"></script>
+  <title>Pacgen管理页面</title>
+</head>
+
+<body>
+  <div id="app">
+    <el-form :model="form" :rules="rules" ref="form" label-width="120px" style="width: 600px;">
+      <el-form-item label="name" prop="name">
+        <el-input v-model="form.name" placeholder="please input your name"></el-input>
+      </el-form-item>
+      <el-form-item label="age" prop="age">
+        <el-input v-model="form.age" placeholder="please input your age"></el-input>
+      </el-form-item>
+      <el-form-item label="Favorite Movie" prop="favoriteMovie">
+        <el-select v-model="form.favoriteMovie">
+          <el-option v-for="movie in movies" :key="movie.name" :label="movie.name" :value="movie.name"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="submit">提交</el-button>
+      </el-form-item>
+    </el-form>
+  </div>
+</body>
+
+<script>
+  const app = new Vue({
+    el: '#app',
+    data() {
+      return {
+        msg: 'hello world',
+        form: {
+          name: '',
+          age: null,
+          favoriteMovie: ''
+        },
+        rules: {
+          name: { required: true, message: '请输入名称', trigger: ['blur', 'change'] },
+          age: [
+            { required: true, message: '请输入年龄', trigger: 'change' },
+            { validator: this.ageValidator, trigger: ['blur', 'change'] }
+          ],
+          favoriteMovie: { required: true, message: '请选择最喜爱的电影', trigger: 'cahnge' }
+        },
+        movies: [
+          { name: 'Star Wars' },
+          { name: 'Vanilla Sky' },
+          { name: 'Atomic Blonde' }
+        ]
+      }
+    },
+    methods: {
+      ageValidator(rule, value, callback) {
+        const regx = /^[1-9]\d*$/
+        if (!value) {
+          callback(new Error('年龄不能为空'))
+        } else if (!regx.test(value)) {
+          callback(new Error('年龄只能输入正整数'))
+        } else {
+          callback()
+        }
+      },
+      submit() {
+        this.$refs.form.validate(valid => {
+          if (valid) {
+            alert('校验成功')
+            // TODO send xhr
+          }
+        })
+      }
+    }
+  });
+</script>
+
+</html>
