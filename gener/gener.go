@@ -3,6 +3,8 @@ package gener
 import (
 	"log"
 	"net/http"
+	"os"
+	"strings"
 
 	"github.com/BurntSushi/toml"
 	"github.com/gin-gonic/gin"
@@ -20,10 +22,23 @@ func NewGener(confFile string) *Gener {
 	if _, err := toml.DecodeFile(confFile, &conf); err != nil {
 		log.Fatalln(err)
 	}
-	for name, _ := range conf.Proxies {
-		pMap[name] = []string{}
+	for name, p := range conf.Proxies {
+		pMap[name] = getTargetDomain(p.TargetFile)
 	}
 	return &Gener{pMap, conf.Listen}
+}
+
+func getTargetDomain(fn string) []string {
+	var allDomains []string
+	dat, err := os.ReadFile(fn)
+	if err != nil {
+		log.Printf("err = %+v\n", err)
+	}
+	for _, d := range strings.Split(string(dat), ",") {
+		allDomains = append(allDomains, strings.Trim(d, " "))
+	}
+	return allDomains
+
 }
 
 func (g *Gener) GetPac(gctx *gin.Context) {
