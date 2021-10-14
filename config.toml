@@ -1,11 +1,15 @@
 listen = "0.0.0.0:8001"
+pac_template = "template/pac.tmpl"
 
 [proxy]
 
   [proxy.outer]
-  address = "10.0.0.1:3128"
-  target_file = "outer.csv"
+  address = "100.109.79.65:3128"
+  target_file = "example/outer.csv"
 
   [proxy.internal]
-  address = "10.0.0.2:3128"
-  target_file = "internal.csv"
+  address = "100.74.93.123:3128"
+  target_file = "example/internal.csv"
+
+  [proxy.direct]
+  target_file = "example/direct.csv"

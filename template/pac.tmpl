@@ -1,28 +1,19 @@
-var proxy = 'PROXY {{ .proxyGFW }}';
+var proxy = 'PROXY {{ .OuterProxy }}';
 var rules = [
-    [
-        [],
-        []
-    ],
-    [
-        [
-            "ip.cn",
-        ],
-        [
-            "gmail.com",
-        ]
-    ]
+  [ ["ipip.net"], [ {{ .DirectTargets }}] ],
+  [ ["ifconfig.co" ], [  {{ .OuterTargets }} ] ]
 ];
 
 var lastRule = '';
+var internalProxy = 'PROXY {{ .InternalProxy }}';
 
 function FindProxyForURL(url, host) {
 
-    internal = ["internal.com"];
+    internal = [ {{ .InternalTargets }} ];
 
     for (i = 0; i < internal.length; i++) { 
         if (dnsDomainIs(host, internal[i])) { 
-			return "PROXY {{ .proxyInternal }}";
+			return internalProxy;
         } 
     } 
 
@@ -39,22 +30,11 @@ function testHost(host, index) {
         for (var j = 0; j < rules[index][i].length; j++) {
             lastRule = rules[index][i][j];
             if (host == lastRule || host.endsWith('.' + lastRule))
-                return i % 2 == 0 ? 'DIRECT' : proxy;
+			if (i == 0) {
+				return 'DIRECT';
+			} 
+			return proxy;
         }
     }
     lastRule = '';
 }
-
-// REF: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/endsWith
-if (!String.prototype.endsWith) {
-    String.prototype.endsWith = function(searchString, position) {
-        var subjectString = this.toString();
-        if (typeof position !== 'number' || !isFinite(position) || Math.floor(position) !== position || position > subjectString.length) {
-            position = subjectString.length;
-        }
-        position -= searchString.length;
-        var lastIndex = subjectString.indexOf(searchString, position);
-        return lastIndex !== -1 && lastIndex === position;
-  };
-}
-

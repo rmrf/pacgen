@@ -15,7 +15,6 @@ func main() {
 	g := gener.NewGener(confFile)
 
 	router := gin.Default()
-	router.LoadHTMLFiles("template/index.tmpl", "template/pac.tmpl")
 	router.GET("/proxy.pac", g.GetPac)
 	router.GET("/admin", g.Admin)
 
