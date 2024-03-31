@@ -6,7 +6,8 @@
   - use Outer proxy to access Gmail.
   - use Internal proxy to access  corperations' internal sites.
 
-![image](https://github.com/rmrf/pacgen/assets/42414/0ae585a8-fc8f-4e74-9a6b-a5e2ee318f0c)
+![image](https://github.com/rmrf/pacgen/assets/42414/4ce3c4a6-e060-4c8e-a1f4-73fccb194e83)
+
 
 ## Why
 
