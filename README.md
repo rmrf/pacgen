@@ -32,3 +32,7 @@ go build && ./pacgen -config ./config.toml
 ```
 
 - Browser proxy settings with PAC url: `http://loalhost:8001/`
+
+## TODO
+
+- [] Auto reload when proxy-domains file changed.

@@ -1,7 +1,6 @@
 aftygh.gov.tw
 aide.gov.tw
 arte.gov.tw
-baidu.com
 chinaso.com
 chinaz.com
 chukuang.gov.tw
@@ -44,7 +43,6 @@ nvri.gov.tw
 nyc.gov.tw
 penghu-nsa.gov.tw
 post.gov.tw
-qq.com
 simplecd.me
 siraya-nsa.gov.tw
 sl-reverse.com
@@ -63,7 +61,6 @@ vghtc.gov.tw
 vghtpe.gov.tw
 wallproxy.com.cn
 wanfang.gov.tw
-weibo.com
 yatsen.gov.tw
 yda.gov.tw
 youdao.com
@@ -2685,6 +2682,7 @@ jav101.com
 jav2be.com
 jav68.tv
 javakiba.org
+java.com
 javbus.com
 javfor.me
 javhd.com
