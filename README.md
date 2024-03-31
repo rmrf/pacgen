@@ -5,6 +5,10 @@
 - Support different domains using different proxies. For example:
   - Outer proxy to access Gmail.
   - Internal proxy to access  corperations' sites.
+ 
+   
+![image](https://github.com/rmrf/pacgen/assets/42414/0ae585a8-fc8f-4e74-9a6b-a5e2ee318f0c)
+
 
 ## How to Run it
 
