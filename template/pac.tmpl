@@ -1,0 +1,23 @@
+var internalProxy = 'PROXY {{ .InternalProxy }}';
+var outerProxy = 'PROXY {{ .OuterProxy }}';
+
+var internalDomains = [ {{ .InternalTargets }} ];
+var outerDomains = [  {{ .OuterTargets }} ] ;
+
+
+function FindProxyForURL(url, host) {
+
+    for (i = 0; i < internalDomains.length; i++) { 
+        if (dnsDomainIs(host, internalDomains[i])) { 
+			return internalProxy;
+        } 
+    } 
+
+
+    for (var i = 0; i < outerDomains.length; i++) {
+        if (dnsDomainIs(host, outerDomains[i])) { 
+			return outerProxy;
+        } 
+    }
+    return 'DIRECT';
+}
