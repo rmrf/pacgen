@@ -8,19 +8,19 @@
 
 ## How to Run it
 
-- copy proxy domains folder
+- Copy proxy domains folder
 
 ```bash
   cp -r proxy-domains-example proxy-domains
 ```
 
-- modify outer/internal domains txt file inside `proxy-domains`
-- modify `config.toml` in root of project:
+- Modify outer/internal domains txt file inside `proxy-domains`
+- Modify `config.toml` in root of project:
   - define diffent proxy for each domain txt file inside `proxy-domains`
-- run it
+- Run it
 
 ```bash
 go build && ./pacgen -config ./config.toml
 ```
 
-- Browser proxy settings with PAC url: `<http://loalhost:8001/>
+- Browser proxy settings with PAC url: `http://loalhost:8001/`
