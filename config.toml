@@ -8,9 +8,9 @@ pac_template = "template/pac.tmpl"
 [proxy]
 
   [proxy.outer]
-  address = "localhost:8088"
+  address = "localhost:8088" # this proxy to access the domains inside bellow txt file
   target_file = "proxy-domains/outer.txt"
 
   [proxy.internal]
-  address = "localhost:8089"
+  address = "localhost:8089" # this proxy to access the domains inside bellow txt file
   target_file = "proxy-domains/internal.txt"
