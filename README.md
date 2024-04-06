@@ -3,10 +3,11 @@
 - Proxy [Pac](https://en.wikipedia.org/wiki/Proxy_auto-config) file Generator, serve pac file as web server locally.
 - Config Browser proxy with PAC url: `http://loalhost:8001`
 - Different domains using different proxies. For example:
-  - use Outer Special proxy to access Gmail.
-  - use Corp proxy to access corperations' internal sites.
+  - with Outer Special proxy to access Gmail.
+  - with Corp proxy to access corperations' internal sites.
 
-![image](https://github.com/rmrf/pacgen/assets/42414/c15f7290-5937-4811-8ea7-c31eb0e00f6c)
+![image](https://github.com/rmrf/pacgen/assets/42414/f83f0667-fcbd-4d5d-802f-394f871c172c)
+
 
 
 ## Why
