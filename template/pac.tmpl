@@ -1,5 +1,5 @@
 var internalProxy = 'PROXY {{ .InternalProxy }}';
-var outerProxy = 'PROXY {{ .OuterProxy }}';
+var outerProxy = 'SOCKS5 {{ .OuterProxy }}';
 
 var internalDomains = [ {{ .InternalTargets }} ];
 var outerDomains = [  {{ .OuterTargets }} ] ;

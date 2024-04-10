@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 	"text/template"
+	"time"
 
 	"pacgen/config"
 
@@ -18,6 +19,7 @@ type Gener struct {
 	ProxyMap    map[string]Proxy
 	ListenAddr  string
 	PacTemplate string
+	C           config.C
 }
 
 type Proxy struct {
@@ -27,20 +29,41 @@ type Proxy struct {
 }
 
 func NewGener(confFile string) *Gener {
-	var pMap = make(map[string]Proxy)
 	var conf config.C
 	if _, err := toml.DecodeFile(confFile, &conf); err != nil {
 		log.Fatalln(err)
 	}
+	proxyMap := generateProxyMap(conf)
+	return &Gener{proxyMap, conf.Listen, conf.PacTemplate, conf}
+}
+
+func generateProxyMap(conf config.C) map[string]Proxy {
+	var proxyMap = make(map[string]Proxy)
 	for name, p := range conf.Proxies {
 		var proxy Proxy
 		proxy.Targert = getTargetDomain(p.TargetFile)
 		proxy.Address = p.Address
 		proxy.TargertStr = genTargetStr(proxy.Targert)
-		pMap[name] = proxy
+		proxyMap[name] = proxy
 	}
-	return &Gener{pMap, conf.Listen, conf.PacTemplate}
+	return proxyMap
+}
 
+func (g *Gener) WatchProxyMap(quit chan struct{}) {
+	ticker := time.NewTicker(time.Duration(g.C.ProxyAutoReloadSeconds) * time.Second)
+	go func() {
+		for {
+			select {
+			case <-ticker.C:
+				proxyMap := generateProxyMap(g.C)
+				g.ProxyMap = proxyMap
+			case <-quit:
+				ticker.Stop()
+				log.Println("WatchProxyMap Ticker stopped")
+				return
+			}
+		}
+	}()
 }
 
 func getTargetDomain(fn string) []string {
@@ -69,7 +92,6 @@ func genTargetStr(targets []string) string {
 }
 
 func (g *Gener) GetPac(gctx *gin.Context) {
-
 	pacString, err := g.FormatPacTmpl(g.PacTemplate)
 	if err != nil {
 		log.Printf("GetPac err = %+v\n", err)
@@ -78,16 +100,6 @@ func (g *Gener) GetPac(gctx *gin.Context) {
 	}
 
 	gctx.String(http.StatusOK, pacString)
-
-}
-
-func (g *Gener) Admin(gctx *gin.Context) {
-	var proxyMap = make(map[string]string)
-	gctx.HTML(http.StatusOK, "index.tmpl", proxyMap)
-
-}
-
-func (g *Gener) AddTargetDomain(domain, proxy string) {
 
 }
 

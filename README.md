@@ -1,6 +1,6 @@
 # Pacgen
 
-- Proxy [Pac](https://en.wikipedia.org/wiki/Proxy_auto-config) file Generator, serve pac file as web server locally.
+- Proxy [Pac](https://en.wikipedia.org/wiki/Proxy_auto-config) file Generator, local web server serve pac file.
 - Config Browser proxy with PAC url: `http://loalhost:8001`
 - Different domains using different proxies. For example:
   - with Outer Special proxy to access Gmail.
@@ -8,14 +8,12 @@
 
 ![image](https://github.com/rmrf/pacgen/assets/42414/f83f0667-fcbd-4d5d-802f-394f871c172c)
 
-
-
 ## Why
 
 - I love to use proxy for accessing sites, it's always clean and easy to troubleshooting.
 - With fine-tuned domains inside [Pac](https://en.wikipedia.org/wiki/Proxy_auto-config) file, I can reach any site with best speed.
 - That's why I start this `pacgen` project, to mapping `[domains] => [proxy]` easily.
-- Those domains which not matching any rules will goest directly access.
+- Those domains which not matching any rules will  access directly.
 
 ## How to Run it
 
