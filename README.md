@@ -36,4 +36,4 @@ go build && ./pacgen -config ./config.toml
 
 ## TODO
 
-- [] Auto reload when proxy-domains file changed.
+- [x] Auto reload proxy-domains files.
