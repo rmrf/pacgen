@@ -38,7 +38,7 @@ func NewGener(confFile string) *Gener {
 }
 
 func generateProxyMap(conf config.C) map[string]Proxy {
-	var proxyMap = make(map[string]Proxy)
+	proxyMap := make(map[string]Proxy)
 	for name, p := range conf.Proxies {
 		var proxy Proxy
 		proxy.Targert = getTargetDomain(p.TargetFile)
@@ -78,8 +78,8 @@ func getTargetDomain(fn string) []string {
 		}
 	}
 	return allDomains
-
 }
+
 func genTargetStr(targets []string) string {
 	var osb strings.Builder
 	for _, ot := range targets {
@@ -99,8 +99,11 @@ func (g *Gener) GetPac(gctx *gin.Context) {
 		return
 	}
 
-	gctx.String(http.StatusOK, pacString)
+	// Set Expires header for 600 seconds
+	expires := time.Now().Add(time.Second * time.Duration(g.C.ExpireSeconds)).Format(http.TimeFormat)
+	gctx.Header("Expires", expires)
 
+	gctx.String(http.StatusOK, pacString)
 }
 
 func (g *Gener) FormatPacTmpl(pacFile string) (string, error) {
@@ -119,10 +122,12 @@ func (g *Gener) FormatPacTmpl(pacFile string) (string, error) {
 		InternalTargets string
 	}
 
-	var d = &data{OuterProxy: g.ProxyMap["outer"].Address,
+	d := &data{
+		OuterProxy:      g.ProxyMap["outer"].Address,
 		OuterTargets:    g.ProxyMap["outer"].TargertStr,
 		InternalProxy:   g.ProxyMap["internal"].Address,
-		InternalTargets: g.ProxyMap["internal"].TargertStr}
+		InternalTargets: g.ProxyMap["internal"].TargertStr,
+	}
 
 	tmpl, err := template.New("pacTmpl").Parse(string(pacDat))
 	if err != nil {
