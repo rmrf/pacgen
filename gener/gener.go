@@ -100,7 +100,7 @@ func (g *Gener) GetPac(gctx *gin.Context) {
 	}
 
 	// Set Expires header for 600 seconds
-	expires := time.Now().Add(time.Second * time.Duration(g.C.ExpireSeconds)).Format(http.TimeFormat)
+	expires := time.Now().UTC().Add(time.Second * time.Duration(g.C.ExpireSeconds)).Format(http.TimeFormat)
 	gctx.Header("Expires", expires)
 
 	gctx.String(http.StatusOK, pacString)
