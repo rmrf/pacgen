@@ -9,6 +9,7 @@ type C struct {
 }
 
 type Proxy struct {
+	Protocol   string `toml:"protocol"`
 	Address    string `toml:"address"`
 	TargetFile string `toml:"target_file"`
 }

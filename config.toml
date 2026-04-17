@@ -10,9 +10,11 @@ proxy_auto_reload_seconds = 5
 [proxy]
 
   [proxy.outer]
-  address = "localhost:8088" # this proxy to access the domains inside bellow txt file
+  protocol = "SOCKS5"          # optional: "PROXY" (default) or "SOCKS5"
+  address = "localhost:8088"   # this proxy to access the domains inside bellow txt file
   target_file = "proxy-domains/outer.txt"
 
   [proxy.internal]
-  address = "localhost:8089" # this proxy to access the domains inside bellow txt file
+  protocol = "PROXY"           # optional: "PROXY" (default) or "SOCKS5"
+  address = "localhost:8089"   # this proxy to access the domains inside bellow txt file
   target_file = "proxy-domains/internal.txt"
