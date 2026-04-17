@@ -111,37 +111,37 @@ func (g *Gener) GetPac(gctx *gin.Context) {
 	gctx.String(http.StatusOK, pacString)
 }
 
-	func (g *Gener) FormatPacTmpl(pacFile string) (string, error) {
-		pacDat, err := os.ReadFile(pacFile)
-		if err != nil {
-			log.Printf("FormatPacTmpl err = %+v\n", err)
-			return "", err
-		}
-
-		var result bytes.Buffer
-
-		type data struct {
-			OuterProxy      string
-			OuterTargets    string
-			InternalProxy   string
-			InternalTargets string
-		}
-
-		d := &data{
-			OuterProxy:      g.ProxyMap["outer"].Protocol + " " + g.ProxyMap["outer"].Address,
-			OuterTargets:    g.ProxyMap["outer"].TargertStr,
-			InternalProxy:   g.ProxyMap["internal"].Protocol + " " + g.ProxyMap["internal"].Address,
-			InternalTargets: g.ProxyMap["internal"].TargertStr,
-		}
-
-		tmpl, err := template.New("pacTmpl").Parse(string(pacDat))
-		if err != nil {
-			return "", err
-		}
-		err = tmpl.Execute(&result, d)
-		if err != nil {
-			return "", err
-		}
-
-		return result.String(), nil
+func (g *Gener) FormatPacTmpl(pacFile string) (string, error) {
+	pacDat, err := os.ReadFile(pacFile)
+	if err != nil {
+		log.Printf("FormatPacTmpl err = %+v\n", err)
+		return "", err
 	}
+
+	var result bytes.Buffer
+
+	type data struct {
+		OuterProxy      string
+		OuterTargets    string
+		InternalProxy   string
+		InternalTargets string
+	}
+
+	d := &data{
+		OuterProxy:      g.ProxyMap["outer"].Protocol + " " + g.ProxyMap["outer"].Address,
+		OuterTargets:    g.ProxyMap["outer"].TargertStr,
+		InternalProxy:   g.ProxyMap["internal"].Protocol + " " + g.ProxyMap["internal"].Address,
+		InternalTargets: g.ProxyMap["internal"].TargertStr,
+	}
+
+	tmpl, err := template.New("pacTmpl").Parse(string(pacDat))
+	if err != nil {
+		return "", err
+	}
+	err = tmpl.Execute(&result, d)
+	if err != nil {
+		return "", err
+	}
+
+	return result.String(), nil
+}
