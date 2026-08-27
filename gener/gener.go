@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"sync"
 	"text/template"
 	"time"
 
@@ -20,6 +21,8 @@ type Gener struct {
 	ListenAddr  string
 	PacTemplate string
 	C           config.C
+
+	mu sync.RWMutex
 }
 
 type Proxy struct {
@@ -34,8 +37,11 @@ func NewGener(confFile string) *Gener {
 	if _, err := toml.DecodeFile(confFile, &conf); err != nil {
 		log.Fatalln(err)
 	}
+	if conf.ProxyAutoReloadSeconds <= 0 {
+		conf.ProxyAutoReloadSeconds = 5
+	}
 	proxyMap := generateProxyMap(conf)
-	return &Gener{proxyMap, conf.Listen, conf.PacTemplate, conf}
+	return &Gener{proxyMap, conf.Listen, conf.PacTemplate, conf, sync.RWMutex{}}
 }
 
 func generateProxyMap(conf config.C) map[string]Proxy {
@@ -61,7 +67,9 @@ func (g *Gener) WatchProxyMap(quit chan struct{}) {
 			select {
 			case <-ticker.C:
 				proxyMap := generateProxyMap(g.C)
+				g.mu.Lock()
 				g.ProxyMap = proxyMap
+				g.mu.Unlock()
 			case <-quit:
 				ticker.Stop()
 				log.Println("WatchProxyMap Ticker stopped")
@@ -127,12 +135,14 @@ func (g *Gener) FormatPacTmpl(pacFile string) (string, error) {
 		InternalTargets string
 	}
 
+	g.mu.RLock()
 	d := &data{
 		OuterProxy:      g.ProxyMap["outer"].Protocol + " " + g.ProxyMap["outer"].Address,
 		OuterTargets:    g.ProxyMap["outer"].TargertStr,
 		InternalProxy:   g.ProxyMap["internal"].Protocol + " " + g.ProxyMap["internal"].Address,
 		InternalTargets: g.ProxyMap["internal"].TargertStr,
 	}
+	g.mu.RUnlock()
 
 	tmpl, err := template.New("pacTmpl").Parse(string(pacDat))
 	if err != nil {
